@@ -94,6 +94,12 @@ app.use((req, res, next) => {
     next();
 });
 
+//new code heree added 
+
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
 // Use routes
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
