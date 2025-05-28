@@ -90,6 +90,7 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user ||null;
+    res.locals.currentPath = req.path;
     // console.log("Current User in middleware:", req.user);
     next();
 });
@@ -104,6 +105,47 @@ app.get("/", (req, res) => {
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
+
+app.get('/search', async (req, res) => {
+  const query = req.query.q || '';
+  const minPrice = parseInt(req.query.minPrice) || 0;
+  const maxPrice = parseInt(req.query.maxPrice) || Infinity;
+  const category = req.query.category || '';
+  const sort = req.query.sort || '';
+
+  const filter = {
+    price: { $gte: minPrice, $lte: maxPrice },
+    $or: [
+      { location: { $regex: query, $options: 'i' } },
+      { title: { $regex: query, $options: 'i' } }
+    ]
+  };
+
+  if (category) {
+    filter.category = category; 
+  }
+
+  let sortOption = {};
+  if (sort === 'priceAsc') sortOption.price = 1;
+  else if (sort === 'priceDesc') sortOption.price = -1;
+
+  try {
+    const listing = await Listing.find(filter).sort(sortOption);
+    res.render('searchResults.ejs', {
+      listing,
+      query,
+      minPrice: req.query.minPrice,
+      maxPrice: req.query.maxPrice,
+      category,
+      sort,
+      currentPath: '/search'
+    });
+  } catch (err) {
+    console.error(err);
+    res.send('Search failed');
+  }
+});
+
 
 // Catch-all for unmatched routes
 app.all("*", (req, res, next) => {

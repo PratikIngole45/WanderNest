@@ -16,9 +16,26 @@
                     <textarea name="listing[description]" type="string" placeholder="Enter description" class="form-control" required></textarea>
                     <div class="invalid-feedback">Please Enter short description</div>
                 </div>
-                <div class="mb-3">
-                    <label for= "image" class="form-label">Upload Image :</label>
-                    <input name="listing[image]" type="file" class="form-control" required>
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for= "image" class="form-label">Upload Image :</label>
+                        <input name="listing[image]" type="file" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-8">
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <!-- NEW LISTING FORM (new.ejs) -->
+                                <select class="form-control" id="category" name="listing[category]" required>
+                                    <option value="">Choose a category</option>
+                                    <option value="Rooms">Rooms</option>
+                                    <option value="Mountains">Mountains</option>
+                                    <option value="Camping">Camping</option>
+                                    <option value="Castles">Castles</option>
+                                    <option value="Farms">Farms</option>
+                                    <option value="Boats">Boats</option>
+                                </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-4">

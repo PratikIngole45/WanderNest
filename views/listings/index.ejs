@@ -1,47 +1,117 @@
 <% layout("/layouts/boilerplate") %> 
 <style>
-    #filters{
+    #filters a.filter {
+        color: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #filters a.filter:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    #filters {
+        
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
-    .filter{
+
+    .filter {
         text-align: center;
-        margin-right: 2.5rem;
-        margin-top: 1.5rem;
+        margin-right: 2rem;
+        margin-top: 1rem;
         opacity: 0.7;
+        transition: 0.2s ease-in-out;
     }
-    .filter:hover{
+
+    .filter:hover {
         opacity: 1;
+        transform: scale(1.1);
         cursor: pointer;
     }
+
     .filter p {
         font-size: 0.8rem;
     }
-    .tax-info{
+
+    .tax-info {
         display: none;
+        font-size: 0.8rem;
+        color: gray;
     }
-    .tax-toggle{
+
+    .tax-toggle {
         border: 1px solid black;
         border-radius: 1rem;
-        padding:1rem;
-        margin-left:2rem;
-        height:3rem;
+        padding: 0.5rem 1rem;
+        margin-left: auto;
         display: flex;
         align-items: center;
-       
+        height: 3rem;
     }
-    #switchCheckDefault{
+
+    #switchCheckDefault {
         cursor: pointer;
+        margin-left: 0.5rem;
+    }
+
+    .search-bar {
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .search-bar input,
+    .search-bar select {
+        margin-bottom: 0.5rem;
+    }
+
+    .listing-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .no-results {
+        text-align: center;
+        margin-top: 2rem;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+    }
+
+    .filter-form .form-control {
+        min-width: 120px;
+    }
+
+    .filter-form button {
+        background-color: #ff385c;
+        border: none;
+        color: white;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
     }
 </style>
 <body>
-    <!-- <h3>All Listings.</h3> -->
-     <div id="filters">
-        <div class="filter">
+    <h3>All Listings.</h3>
+     <!-- <div id="filters">
+        <a href="/search" class="filter">
             <div><i class="fa-solid fa-fire"></i></div>
             <p><b>Trending</b></p>
-        </div>
+        </a>
         <div class="filter">
             <div><i class="fa-solid fa-bed"></i></div>
             <p>Rooms</p>
@@ -88,7 +158,62 @@
                 <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
             </div>
         </div>
-     </div>
+     </div> -->
+    <div id="filters">
+        <a href="/search" class="filter">
+            <div><i class="fa-solid fa-fire"></i></div>
+            <p><b>Trending</b></p>
+        </a>
+        <a href="/search?category=Rooms" class="filter">
+            <div><i class="fa-solid fa-bed"></i></div>
+            <p>Rooms</p>
+        </a>
+        <a href="/search?category=Iconic City" class="filter">
+            <div><i class="fa-solid fa-mountain-city"></i></div>
+            <p>Iconic City</p>
+        </a>
+        <a href="/search?category=Mountains" class="filter">
+            <div><i class="fa-solid fa-mountain-sun"></i></div>
+            <p>Mountains</p>
+        </a>
+        <a href="/search?category=Castles" class="filter">
+            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            <p>Castles</p>
+        </a>
+        <a href="/search?category=Amazing pools" class="filter">
+            <div><i class="fa-solid fa-person-swimming"></i></div>
+            <p>Amazing pools</p>
+        </a>
+        <a href="/search?category=Camping" class="filter">
+            <div><i class="fa-solid fa-campground"></i></div>
+            <p>Camping</p>
+        </a>
+        <a href="/search?category=Farms" class="filter">
+            <div><i class="fa-solid fa-cow"></i></div>
+            <p>Farms</p>
+        </a>
+        <a href="/search?category=Arctic" class="filter">
+            <div><i class="fa-solid fa-snowflake"></i></div>
+            <p>Arctic</p>
+        </a>
+        <a href="/search?category=Domes" class="filter">
+            <div><i class="fa-solid fa-igloo"></i></div>
+            <p>Domes</p>
+        </a>
+        <a href="/search?category=Boats" class="filter">
+            <div><i class="fa-solid fa-ship"></i></div>
+            <p>Boats</p>
+        </a>
+
+    <!-- Taxes toggle stays unchanged -->
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+            </div>
+        </div>
+    </div>
+
 
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
     <% for(let listing of allListings) { %>

@@ -12,8 +12,11 @@ const listingSchema = new Schema({
         url:String,
         filename:String,
     },
-    
-
+    category: {
+        type: String,
+        enum: ['Rooms', 'Mountains', 'Camping', 'Farms', 'Boats', 'Castles'], // Customize
+        required: true
+    },
     price: {
         type: Number,
         required: true,
@@ -40,7 +43,7 @@ const listingSchema = new Schema({
     coordinates: {
       type: [Number],
       required: true
-    }
+    },
   },
 });
 

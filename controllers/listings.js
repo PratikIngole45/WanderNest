@@ -6,10 +6,37 @@ const mapToken = process.env.MAP_TOKEN;
 const geoCodingClient = mbxGeocoding({accessToken:mapToken});
 
 
-module.exports.index = async (req, res) =>{
-    const allListings = await Listing.find({});
-    res.render("./listings/index.ejs",{allListings });
-}
+// module.exports.index = async (req, res) =>{
+//     const allListings = await Listing.find({});
+//     res.render("./listings/index.ejs",{allListings });
+// }
+module.exports.index = async (req, res) => {
+  const { q, minPrice, maxPrice, category, sort } = req.query;
+
+  let filter = {};
+
+  if (q) filter.title = new RegExp(q, 'i');
+
+  if (minPrice) filter.price = { ...filter.price, $gte: parseInt(minPrice) };
+  if (maxPrice) filter.price = { ...filter.price, $lte: parseInt(maxPrice) };
+
+  if (category) filter.category = category;  // ✅ This is allowed now
+
+  let sortOption = {};
+  if (sort === 'priceAsc') sortOption.price = 1;
+  if (sort === 'priceDesc') sortOption.price = -1;
+
+  console.log("FILTER BEING USED:", filter); // ✅ Debug
+
+  try {
+    const allListings = await Listing.find(filter).sort(sortOption);
+    res.render("./listings/index.ejs", { allListings });
+  } catch (e) {
+    console.error("ERROR:", e);
+    req.flash("error", "Something went wrong.");
+    res.redirect("/");
+  }
+};
 
 module.exports.renderNewForm=(req, res) =>{
     res.render("./listings/new.ejs");
@@ -84,3 +111,41 @@ module.exports.destroyListing = async(req, res) =>{
     req.flash("success", "Listing Deleted Successfully.");
     res.redirect("/listings");
 }
+// module.exports.searchListings = async (req, res) => {
+//     try {
+//         const { category, q, minPrice, maxPrice } = req.query;
+//         let query = {};
+        
+//         // Category filter
+//         if (category) {
+//             query.category = category;
+//         }
+        
+//         // Text search (for title or description)
+//         if (q) {
+//             query.$or = [
+//                 { title: { $regex: q, $options: 'i' } },
+//                 { description: { $regex: q, $options: 'i' } }
+//             ];
+//         }
+        
+//         // Price range filter
+//         if (minPrice || maxPrice) {
+//             query.price = {};
+//             if (minPrice) query.price.$gte = parseFloat(minPrice);
+//             if (maxPrice) query.price.$lte = parseFloat(maxPrice);
+//         }
+        
+//         const listings = await Listing.find(query);
+//         res.render("listings/search", { 
+//             allListings: listings,
+//             searchQuery: req.query 
+//         });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).render('error', { 
+//             error: "Server Error",
+//             message: "An error occurred while searching listings"
+//         });
+//     }
+// };

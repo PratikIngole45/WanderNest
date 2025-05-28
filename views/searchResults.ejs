@@ -1,0 +1,203 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<style>
+    #filters {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .filter {
+        text-align: center;
+        margin-right: 2rem;
+        margin-top: 1rem;
+        opacity: 0.7;
+        transition: 0.2s ease-in-out;
+    }
+
+    .filter:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+    }
+
+    .tax-info {
+        display: none;
+        font-size: 0.8rem;
+        color: gray;
+    }
+
+    .tax-toggle {
+        border: 1px solid black;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        height: 3rem;
+    }
+
+    #switchCheckDefault {
+        cursor: pointer;
+        margin-left: 0.5rem;
+    }
+
+    .search-bar {
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .search-bar input,
+    .search-bar select {
+        margin-bottom: 0.5rem;
+    }
+
+    .listing-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .no-results {
+        text-align: center;
+        margin-top: 2rem;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+    }
+
+    .filter-form .form-control {
+        min-width: 200px;
+        
+    }
+
+    .filter-form button {
+        background-color: #ff385c;
+        border: none;
+        color: white;
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+    }
+</style>
+
+<body>
+
+    <h3>Showing results for "<%= query %>"</h3>
+
+    <!-- Filter + Sort Form -->
+    <form method="GET" action="/search" class="filter-form">
+        <input type="hidden" name="q" value="<%= query %>">
+
+        <div>
+            <label>Min Price</label>
+            <input type="number" name="minPrice" class="form-control" value="<%= minPrice || '' %>">
+        </div>
+
+        <div>
+            <label>Max Price</label>
+            <input type="number" name="maxPrice" class="form-control" value="<%= maxPrice || '' %>">
+        </div>
+
+        <div>
+            <label>Category</label>
+            <select name="category" class="form-control">
+                <option value="">All</option>
+                <option value="Rooms" <%= category === 'Rooms' ? 'selected' : '' %>>Rooms</option>
+                <option value="Mountains" <%= category === 'Mountains' ? 'selected' : '' %>>Mountains</option>
+                <option value="Camping" <%= category === 'Camping' ? 'selected' : '' %>>Camping</option>
+                <option value="Castles" <%= category === 'Castles' ? 'selected' : '' %>>Castles</option>
+                <option value="Farms" <%= category === 'Farms' ? 'selected' : '' %>>Farms</option>
+                <option value="Boats" <%= category === 'Boats' ? 'selected' : '' %>>Boats</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Sort By</label>
+            <select name="sort" class="form-control">
+                <option value="">Default</option>
+                <option value="priceAsc" <%= sort === 'priceAsc' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="priceDesc" <%= sort === 'priceDesc' ? 'selected' : '' %>>Price: High to Low</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Apply Filters</button>
+        </div>
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+            </div>
+        </div>
+    </form>
+    
+
+    <!-- Category Filter Icons -->
+    <!-- <div id="filters">
+        <div class="filter"><i class="fa-solid fa-fire"></i><p><b>Trending</b></p></div>
+        <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
+        <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic City</p></div>
+        <div class="filter"><i class="fa-solid fa-mountain-sun"></i><p>Mountains</p></div>
+        <div class="filter"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></div>
+        <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Amazing pools</p></div>
+        <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
+        <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
+        <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
+        <div class="filter"><i class="fa-solid fa-igloo"></i><p>Domes</p></div>
+        <div class="filter"><i class="fa-solid fa-ship"></i><p>Boats</p></div>
+
+        <div class="tax-toggle">
+            <div class="form-check-reverse form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
+            </div>
+        </div>
+    </div> -->
+
+    <% if (listing.length === 0) { %>
+        <div class="no-results">No results found for "<%= query %>". Try a different keyword.</div>
+    <% } %>
+
+    <!-- Listings -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+        <% for (let item of listing) { %>
+            <a href="/listings/<%= item._id %>" class="listing-link">
+                <div class="card col listing-card mb-4">
+                    <img src="<%= item.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <b><%= item.title %></b><br />
+                            ₹<%= item.price.toLocaleString("en-IN") %> / night
+                            <span class="tax-info"> +18% GST</span>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        <% } %>
+    </div>
+
+</body>
+
+<script>
+    let taxSwitch = document.getElementById("switchCheckDefault");
+    taxSwitch.addEventListener("click", () => {
+        let taxInfo = document.getElementsByClassName("tax-info");
+        for (info of taxInfo) {
+            info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+        }
+    });
+</script>
