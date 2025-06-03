@@ -1,0 +1,177 @@
+
+<!-- 
+<style>
+  .settings-container {
+    max-width: 700px;
+    margin: auto;
+    padding-top: 2rem;
+  }
+
+  .settings-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .settings-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .settings-card h5 {
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+  }
+
+  .form-label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .form-control {
+    border-radius: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+
+  .btn-danger,
+  .btn-outline-danger {
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+
+  .text-danger {
+    font-weight: 600;
+  }
+</style>
+
+<div class="container settings-container">
+  <h2 class="mb-4 text-center fw-bold">Account Settings</h2>
+
+  <form action="/account-settings/password" method="POST" class="settings-card">
+    <h5>Change Password</h5>
+    <div class="mb-3">
+      <label for="currentPassword" class="form-label">Current Password</label>
+      <input type="password" name="currentPassword" class="form-control" required placeholder="Enter current password">
+    </div>
+    <div class="mb-3">
+      <label for="newPassword" class="form-label">New Password</label>
+      <input type="password" name="newPassword" class="form-control" required placeholder="Enter new password">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Password</button>
+  </form>
+
+  <form action="/account-settings/delete" method="POST" onsubmit="return confirm('Are you sure? This cannot be undone.')" class="settings-card border-top border-4 border-danger">
+    <h5 class="text-danger">Delete Account</h5>
+    <p>This action will permanently delete your account.</p>
+    <button type="submit" class="btn btn-outline-danger">Delete My Account</button>
+  </form>
+</div> -->
+
+<% layout("/layouts/boilerplate") %>
+
+<style>
+  .settings-container {
+    max-width: 700px;
+    margin: auto;
+    padding-top: 2rem;
+  }
+
+  .settings-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .settings-card:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .settings-card h5 {
+    font-weight: 600;
+    margin-bottom: 1.2rem;
+  }
+
+  .form-label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+  }
+
+  .form-control {
+    border-radius: 10px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+
+  .btn-danger,
+  .btn-outline-danger {
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+
+  .text-danger {
+    font-weight: 600;
+  }
+</style>
+
+<div class="container settings-container">
+  <h2 class="mb-4 text-center fw-bold">Account Settings</h2>
+
+  <!-- Change Email Card -->
+  <form action="/account-settings/email" method="POST" class="settings-card">
+    <h5>Change Email</h5>
+    <div class="mb-3">
+      <label for="currentEmail" class="form-label">Current Email</label>
+      <input type="email" name="currentEmail" class="form-control" value="<%= user.email %>" readonly>
+    </div>
+    <div class="mb-3">
+      <label for="newEmail" class="form-label">New Email</label>
+      <input type="email" name="newEmail" class="form-control" required placeholder="Enter new email">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Email</button>
+  </form>
+
+  <!-- Change Password Card -->
+  <form action="/account-settings/password" method="POST" class="settings-card">
+    <h5>Change Password</h5>
+    <div class="mb-3">
+      <label for="currentPassword" class="form-label">Current Password</label>
+      <input type="password" name="currentPassword" class="form-control" required placeholder="Enter current password">
+    </div>
+    <div class="mb-3">
+      <label for="newPassword" class="form-label">New Password</label>
+      <input type="password" name="newPassword" class="form-control" required placeholder="Enter new password">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Password</button>
+  </form>
+
+  <!-- Delete Account Card -->
+  <form action="/account-settings/delete" method="POST" class="settings-card border-top border-4 border-danger">
+    <h5 class="text-danger">Delete Account</h5>
+    <p>This action will permanently delete your account. Please confirm your password to proceed.</p>
+    <div class="mb-3">
+      <label for="deletePassword" class="form-label">Password</label>
+      <input type="password" name="deletePassword" class="form-control" required placeholder="Enter your password">
+    </div>
+    <button type="submit" class="btn btn-outline-danger">Delete My Account</button>
+</form>
+</div>
+
+

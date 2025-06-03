@@ -26,10 +26,10 @@ module.exports.index = async (req, res) => {
   if (sort === 'priceAsc') sortOption.price = 1;
   if (sort === 'priceDesc') sortOption.price = -1;
 
-  console.log("FILTER BEING USED:", filter); // ✅ Debug
+//   console.log("FILTER BEING USED:", filter); // ✅ Debug
 
   try {
-    const allListings = await Listing.find(filter).sort(sortOption);
+    const allListings = await Listing.find(filter).sort(sortOption).populate('owner');
     res.render("./listings/index.ejs", { allListings });
   } catch (e) {
     console.error("ERROR:", e);
@@ -44,7 +44,10 @@ module.exports.renderNewForm=(req, res) =>{
 
 module.exports.showListing=async(req, res) =>{
     let {id} = req.params;
-    const listing = await Listing.findById(id).populate({path : "reviews", populate:{path: "author"}}).populate("owner");
+    // const listing = await Listing.findById(id).populate({path : "reviews", populate:{path: "author"}}).populate("owner");
+    const listing = await Listing.findById(id)
+        .populate({ path: "reviews", populate: { path: "author" } })
+        .populate("owner");
     if (!listing){
         req.flash("error", "Listing does not exists");
         res.redirect("/listings");
@@ -111,41 +114,3 @@ module.exports.destroyListing = async(req, res) =>{
     req.flash("success", "Listing Deleted Successfully.");
     res.redirect("/listings");
 }
-// module.exports.searchListings = async (req, res) => {
-//     try {
-//         const { category, q, minPrice, maxPrice } = req.query;
-//         let query = {};
-        
-//         // Category filter
-//         if (category) {
-//             query.category = category;
-//         }
-        
-//         // Text search (for title or description)
-//         if (q) {
-//             query.$or = [
-//                 { title: { $regex: q, $options: 'i' } },
-//                 { description: { $regex: q, $options: 'i' } }
-//             ];
-//         }
-        
-//         // Price range filter
-//         if (minPrice || maxPrice) {
-//             query.price = {};
-//             if (minPrice) query.price.$gte = parseFloat(minPrice);
-//             if (maxPrice) query.price.$lte = parseFloat(maxPrice);
-//         }
-        
-//         const listings = await Listing.find(query);
-//         res.render("listings/search", { 
-//             allListings: listings,
-//             searchQuery: req.query 
-//         });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).render('error', { 
-//             error: "Server Error",
-//             message: "An error occurred while searching listings"
-//         });
-//     }
-// };

@@ -7,6 +7,14 @@ const userSchema = new Schema({
         type:String,
         required:true,
     },
+    fullName: String,
+    age: Number,
+    bio: String,
+    image: String,
+    savedListings: [{ type: Schema.Types.ObjectId, ref: "Listing" }],
+    // In models/user.js
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
 })
 
 userSchema.plugin(passportLocalMongoose);

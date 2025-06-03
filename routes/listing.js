@@ -25,6 +25,9 @@ router.route("/:id")
 //edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
-// router.get('/search', listingController.searchListings);
 
+router.get('/my-listings', isLoggedIn, async (req, res) => {
+  const listings = await Listing.find({ owner: req.user._id });
+  res.render('listings/myListings', { listings });
+});
 module.exports = router;

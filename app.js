@@ -27,6 +27,19 @@ const listingRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
+
+// MongoDB connection
+// const dbUrl = process.env.ATLASDB_URL;
+// main().then(() => {
+//     console.log("Connected to DB.");
+// }).catch((err) => {
+//     console.log("DB Connection Error:", err);
+// });
+
+// async function main() {
+// }
+
+
 // MongoDB connection
 const dbUrl = process.env.ATLASDB_URL;
 main().then(() => {
@@ -34,9 +47,11 @@ main().then(() => {
 }).catch((err) => {
     console.log("DB Connection Error:", err);
 });
-
 async function main() {
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(dbUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
 }
 
 // View engine setup
@@ -89,7 +104,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user ||null;
+    res.locals.currUser = req.user || null;
     res.locals.currentPath = req.path;
     // console.log("Current User in middleware:", req.user);
     next();
@@ -112,7 +127,6 @@ app.get('/search', async (req, res) => {
   const maxPrice = parseInt(req.query.maxPrice) || Infinity;
   const category = req.query.category || '';
   const sort = req.query.sort || '';
-
   const filter = {
     price: { $gte: minPrice, $lte: maxPrice },
     $or: [
@@ -120,33 +134,29 @@ app.get('/search', async (req, res) => {
       { title: { $regex: query, $options: 'i' } }
     ]
   };
-
   if (category) {
     filter.category = category; 
   }
-
   let sortOption = {};
   if (sort === 'priceAsc') sortOption.price = 1;
   else if (sort === 'priceDesc') sortOption.price = -1;
-
   try {
-    const listing = await Listing.find(filter).sort(sortOption);
+    const listings = await Listing.find(filter).sort(sortOption);
     res.render('searchResults.ejs', {
-      listing,
+      listings,
       query,
       minPrice: req.query.minPrice,
       maxPrice: req.query.maxPrice,
       category,
       sort,
-      currentPath: '/search'
+      // currentPath: '/search'
+      currentPath: req.path
     });
   } catch (err) {
     console.error(err);
     res.send('Search failed');
   }
 });
-
-
 // Catch-all for unmatched routes
 app.all("*", (req, res, next) => {
     next(new ExpressError(404, "PAGE NOT FOUND!"));

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review =  require("./review.js");
 
+
 const listingSchema = new Schema({
     title: {
         type: String,
@@ -44,7 +45,7 @@ const listingSchema = new Schema({
       type: [Number],
       required: true
     },
-  },
+    },
 });
 
 listingSchema.post("findOneAndDelete", async(listing)=>{

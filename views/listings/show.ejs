@@ -15,7 +15,9 @@
             <img src="<%=listing.image.url %>" class="card-img-top" alt="Listing_image">
             <div class="card-body">
                 <p class="card-text">Owned By : 
-                    <b><i><%=listing.owner.username%></i></b>
+                    <!-- <b><i><%=listing.owner.username%></i></b> -->
+                    <b><i><%= listing.owner ? listing.owner.username : "Unknown Owner" %></i></b>
+                    
                 </p>
                 <p class="card-text">
                     <%=listing.description %>

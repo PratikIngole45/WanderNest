@@ -1,0 +1,153 @@
+<% layout("/layouts/boilerplate") %> 
+<style>
+  .profile-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+  }
+
+  .profile-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #007bff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  .user-info {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .edit-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .edit-section {
+    margin-top: 30px;
+    display: none;
+    text-align: left;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  textarea,
+  input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+
+  input[readonly] {
+    background-color: #f0f0f0;
+  }
+
+  button[type="submit"] {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 100%;
+  }
+  .backBtn{
+    display: inline-block;
+      margin: 20px;
+      padding: 10px 16px;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      border: 1px solid #ccc;
+      transition: background 0.3s ease;
+  }
+</style>
+
+<div class="profile-container">
+  <!-- Profile Image -->
+  <img src="<%= user.image || '/images/default-avatar.png' %>" class="profile-image" alt="Upload Profile Picture" /><br>
+  
+    <p><strong>Username :</strong> <%= user.username %></p>
+ 
+  <!-- User Info -->
+  <div class="user-info">
+    <p><strong>Full Name:</strong> <%= user.fullName %></p>
+    <p><strong>Age:</strong> <%= user.age %></p>
+    <p><strong>Bio:</strong> <%= user.bio %></p>
+    <p><strong>Email:</strong> <%= user.email %></p>
+  </div>
+
+  <!-- Toggle Edit Button -->
+  <button class="edit-btn" onclick="toggleEdit()">Update Profile</button>
+
+  <!-- Edit Form (Initially Hidden) -->
+  <div class="edit-section" id="editSection">
+    <form action="/profile" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>User Name:</label>
+        <input type="text" name="username" value="<%= user.username %>" readonly />
+      </div>
+      <div class="form-group">
+        <label>Full Name:</label>
+        <input type="text" name="fullName" value="<%= user.fullName %>" required />
+      </div>
+      <div class="form-group">
+        <label>Age:</label>
+        <input type="number" name="age" value="<%= user.age %>" />
+      </div>
+      <div class="form-group">
+        <label>Bio:</label>
+        <textarea name="bio"><%= user.bio %></textarea>
+      </div>
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" value="<%= user.email %>" readonly />
+      </div>
+      <div class="form-group">
+        <label>Change Profile Picture:</label>
+        <input type="file" name="profilePic" accept="image/*" />
+      </div>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div><br>
+  <a href="/" class="backBtn" >
+      ← Back to Home
+  </a>
+</div>
+
+<script>
+  function toggleEdit() {
+    document.getElementById("editSection").style.display = "block";
+  }
+</script>
+
+

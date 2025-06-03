@@ -4,7 +4,6 @@
     color:#fff;
     border-radius: 25px;
     padding:0 1rem 0 1rem;
-    
   }
   .search-btn:hover{ 
     background-color: #fe424d;
@@ -20,7 +19,9 @@
     font-size: 1rem;
     text-align: center;
   }
-
+  .dropdown-toggle-no-caret::after {
+    display: none !important;
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
@@ -37,7 +38,8 @@
       </div>
 
       <!-- Centered search (conditionally shown) -->
-      <% if (currentPath === '/' || currentPath === "/listings" || currentPath === "/search") { %>
+     <!-- if (currentPath === '/' || currentPath === "/listings" || currentPath === "/search")  -->
+      <% if (typeof currentPath !== 'undefined' && (currentPath === '/' || currentPath === '/listings' || currentPath === '/search')) { %>
         <div class="navbar-nav mx-auto">
           <form class="d-flex" role="search" action="/search" method="GET">
             <input class="form-control me-2 search-inp" type="search" name="q" placeholder="Search destination" required />
@@ -47,14 +49,35 @@
           </form>
         </div>
       <% } %>
+
       <!-- Right-aligned items -->
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Add new Listings</a>
-        <% if (!currUser) { %>       
+        
+        <% if (typeof currUser === 'undefined' || !currUser) { %>       
           <a class="nav-link" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Login</b></a>
         <% } else { %>
           <a class="nav-link" href="/logout"><b>logout</b></a>
+        
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle-no-caret d-flex align-items-center" href="#" id="userMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <% if (currUser && currUser.image) { %>
+                <img src="<%= currUser.image %>" alt="Profile Image" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;" />
+              <% } else { %>
+                <i class="fa-regular fa-circle-user" style="font-size: 1.5rem;"></i>
+              <% } %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+              <li><a class="dropdown-item" href="/profile"><i class="fa fa-user me-2"></i> My Profile</a></li>
+              <li><a class="dropdown-item" href="/my-listings"><i class="fa fa-home me-2"></i> My Listings</a></li>
+              <li><a class="dropdown-item" href="/saved-properties"><i class="fa fa-heart me-2"></i> Saved Properties</a></li>
+              <li><a class="dropdown-item" href="/account-settings"><i class="fa fa-cog me-2"></i> Account Settings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="/logout"><i class="fa fa-sign-out-alt me-2"></i> Log Out</a></li>
+            </ul>
+          </li>
+
         <% } %>
       </div>
     </div>

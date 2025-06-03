@@ -144,45 +144,22 @@
             </div>
         </div>
     </form>
-    
-
-    <!-- Category Filter Icons -->
-    <!-- <div id="filters">
-        <div class="filter"><i class="fa-solid fa-fire"></i><p><b>Trending</b></p></div>
-        <div class="filter"><i class="fa-solid fa-bed"></i><p>Rooms</p></div>
-        <div class="filter"><i class="fa-solid fa-mountain-city"></i><p>Iconic City</p></div>
-        <div class="filter"><i class="fa-solid fa-mountain-sun"></i><p>Mountains</p></div>
-        <div class="filter"><i class="fa-brands fa-fort-awesome"></i><p>Castles</p></div>
-        <div class="filter"><i class="fa-solid fa-person-swimming"></i><p>Amazing pools</p></div>
-        <div class="filter"><i class="fa-solid fa-campground"></i><p>Camping</p></div>
-        <div class="filter"><i class="fa-solid fa-cow"></i><p>Farms</p></div>
-        <div class="filter"><i class="fa-solid fa-snowflake"></i><p>Arctic</p></div>
-        <div class="filter"><i class="fa-solid fa-igloo"></i><p>Domes</p></div>
-        <div class="filter"><i class="fa-solid fa-ship"></i><p>Boats</p></div>
-
-        <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
-            </div>
-        </div>
-    </div> -->
-
-    <% if (listing.length === 0) { %>
+    <% if (listings.length === 0) { %>
         <div class="no-results">No results found for "<%= query %>". Try a different keyword.</div>
     <% } %>
-
+    <hr>
     <!-- Listings -->
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-        <% for (let item of listing) { %>
+        <% for (let item of listings) { %>
             <a href="/listings/<%= item._id %>" class="listing-link">
                 <div class="card col listing-card mb-4">
                     <img src="<%= item.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;">
                     <div class="card-body">
                         <p class="card-text">
                             <b><%= item.title %></b><br />
-                            ₹<%= item.price.toLocaleString("en-IN") %> / night
-                            <span class="tax-info"> +18% GST</span>
+                            <%=item.location %><br>
+                            &#8377;<%= item.price.toLocaleString("en-IN") %> / night
+                            <i class="tax-info" &nbsp; &nbsp;>+18% GST</i>
                         </p>
                     </div>
                 </div>
